@@ -1,4 +1,4 @@
-import { extractPdfText } from "../services/Pdf.service.js";
+import { extractPdfText } from "../services/Pdf.Service.js";
 export const pdfController = async (req, res) => {
     const filePath = req.file.path;
     if (!filePath) {
