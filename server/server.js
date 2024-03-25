@@ -1,13 +1,16 @@
 import express from "express"
 import bodyParser from "body-parser"
 import dotenv from "dotenv"
+import cors from "cors"
 import imageRoute from "./routes/Image.route.js"
 import pdfRoutes from "./routes/pdf.route.js"
 const app = express()
 dotenv.config()
+app.use(cors())
 app.use(bodyParser.json())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 
 const PORT = process.env.PORT || 3001
 
