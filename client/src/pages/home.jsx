@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { uploadFile } from "../utils/api";
-
+import DataPage from "./data";
 const HomePage = () => {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  const [response, setResponse] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     setFile(selectedFile);
@@ -22,6 +23,13 @@ const HomePage = () => {
     try {
       const response = await uploadFile(file);
       console.log(response);
+      if(response.success) {
+        setResponse(response);
+        setShowModal(true); 
+        console.log(response);
+      }else{
+        alert(response.message)
+      }
     } catch (error) {
       console.error(error.message);
     } finally {
@@ -29,9 +37,13 @@ const HomePage = () => {
     }
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   return (
-    <div className="flex flex-col justify-between h-screen">
-      <div className="flex-1 overflow-y-auto p-4">
+    <div className="flex flex-col justify-between h-full">
+      <div className={`flex-1 overflow-y-auto p-4 ${showModal ? "hidden" : ""}`}>
         <h1 className="text-2xl font-semibold mb-4">Main Content</h1>
         <p className="text-gray-600">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nisi
@@ -81,6 +93,11 @@ const HomePage = () => {
           {loading ? "Uploading..." : "Upload"}
         </button>
       </div>
+          {response && response.success && (
+              <div className="mb-24 p-4 shadow-lg">
+                <DataPage data={response}  onClose={handleCloseModal} />
+              </div>
+          )}
     </div>
   );
 };
